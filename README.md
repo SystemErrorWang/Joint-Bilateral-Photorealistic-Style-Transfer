@@ -1,9 +1,8 @@
-<br><br><br>
 
 # Joint Bilateral Learning for Real-time Universal Photorealistic Style Transfer
- [paper](https://arxiv.org/pdf/2004.10955.pdf) 
+ 
 
-This is an unofficial implementation of paper “Joint Bilateral Learning for Real-time Universal Photorealistic Style Transfer”.
+This is an unofficial implementation of paper [Joint Bilateral Learning for Real-time Universal Photorealistic Style Transfer](https://arxiv.org/pdf/2004.10955.pdf) .
 
 The bilateral grid upsampling part is borrowed from this repo: https://github.com/creotiv/hdrnet-pytorch.
 
