@@ -6,8 +6,8 @@ This is an unofficial implementation of paper [Joint Bilateral Learning for Real
 
 The bilateral grid upsampling part is borrowed from this repo: https://github.com/creotiv/hdrnet-pytorch.
 
-You can train the model by simply change the dataset location in train.py. There maybe some minor problems,
-but I this debugging them will not cost mush time.
+You can train the model by downloading a pretrained vgg model (I download it from torchvision official repo) and change the dataset location in train.py. There maybe some minor problems,
+but I think debugging them will not cost mush time.
 
 I tried to train this project with my implementation, but failed to get results close to the paper shows.
 
