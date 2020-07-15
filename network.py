@@ -3,6 +3,8 @@ import blocks
 import numpy as np
 import torch.nn as nn
 import torch.nn.functional as F
+
+from torchvision import models
 from collections import OrderedDict
 from adain import adaptive_instance_norm
 
@@ -303,4 +305,37 @@ class BilateralNetwork(nn.Module):
         output = self.apply_coeffs(slice_coeffs, content)
         output = torch.sigmoid(output)
         return output, coeffs
+
+
+
+
+class Vgg19(torch.nn.Module):
+    def __init__(self, weight_path='vgg19.pth'):
+        super(Vgg19, self).__init__()
+        vgg19 = models.vgg19(pretrained=False)
+        vgg19.load_state_dict(torch.load(weight_path))
+        
+        self.slice1 = torch.nn.Sequential()
+        self.slice2 = torch.nn.Sequential()
+        self.slice3 = torch.nn.Sequential()
+        self.slice4 = torch.nn.Sequential()
+        for x in range(1):
+            self.slice1.add_module(str(x), vgg19.features[x])
+        for x in range(1, 6):
+            self.slice2.add_module(str(x), vgg19.features[x])
+        for x in range(6, 11):
+            self.slice3.add_module(str(x), vgg19.features[x])
+        for x in range(11, 20):
+            self.slice4.add_module(str(x), vgg19.features[x])
+        
+        for param in self.parameters():
+            param.requires_grad = False
+
+    def forward(self, inputs):
+        conv1_1 = self.slice1(inputs)
+        conv2_1 = self.slice2(conv1_1)
+        conv3_1 = self.slice3(conv2_1)
+        conv4_1 = self.slice4(conv3_1)
+        
+        return conv1_1, conv2_1, conv3_1, conv4_1
         

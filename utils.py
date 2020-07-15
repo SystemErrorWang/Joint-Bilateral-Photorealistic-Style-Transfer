@@ -25,6 +25,27 @@ def regularize(coeff):
     return total_loss
 
 
+
+class LaplacianRegularizer(nn.Module):
+    def __init__(self):
+        super(LaplacianRegularizer, self).__init__()
+        self.mse_loss = torch.nn.MSELoss(reduction='sum')
+
+    def forward(self, f):
+        loss = 0.
+        for i in range(f.shape[2]):
+            for j in range(f.shape[3]):
+                up = max(i-1, 0)
+                down = min(i+1, f.shape[2] - 1)
+                left = max(j-1, 0)
+                right = min(j+1, f.shape[3] - 1)
+                term = f[:,:,i,j].view(f.shape[0], f.shape[1], 1, 1).\
+                        expand(f.shape[0], f.shape[1], down - up+1, right-left+1)
+                loss += self.mse_loss(term, f[:, :, up:down+1, left:right+1])
+        return loss
+
+
+
 class ContentLoss(nn.Module):
     def __init__(self):
         super(ContentLoss, self).__init__()
